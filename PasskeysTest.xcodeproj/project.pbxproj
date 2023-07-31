@@ -1,0 +1,414 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		69223F892A708897001ECA9F /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69223F882A708897001ECA9F /* AccountStore.swift */; };
+		69223F8B2A708986001ECA9F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69223F8A2A708986001ECA9F /* User.swift */; };
+		694909022A5F5BA1003FDA76 /* PasskeysTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694909012A5F5BA1003FDA76 /* PasskeysTestApp.swift */; };
+		694909042A5F5BA1003FDA76 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694909032A5F5BA1003FDA76 /* LoginView.swift */; };
+		694909062A5F5BA2003FDA76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 694909052A5F5BA2003FDA76 /* Assets.xcassets */; };
+		694909092A5F5BA2003FDA76 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 694909082A5F5BA2003FDA76 /* Preview Assets.xcassets */; };
+		69C850502A780D3000460C13 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 69C8504F2A780D3000460C13 /* .gitignore */; };
+		69D590B42A6730FB00BF2BAD /* VenmoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D590B32A6730FB00BF2BAD /* VenmoViewController.swift */; };
+		69D590B62A67345A00BF2BAD /* Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D590B52A67345A00BF2BAD /* Transactions.swift */; };
+		69D590B82A673C5300BF2BAD /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D590B72A673C5300BF2BAD /* Account.swift */; };
+		69D590BA2A674A0D00BF2BAD /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D590B92A674A0D00BF2BAD /* SampleData.swift */; };
+		69E1E92D2A671A0D0016D031 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E1E92C2A671A0D0016D031 /* AppView.swift */; };
+		69E1E92F2A671B0A0016D031 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E1E92E2A671B0A0016D031 /* HomeView.swift */; };
+		69E1E9312A671CD10016D031 /* PayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E1E9302A671CD10016D031 /* PayView.swift */; };
+		69E1E9332A671D0E0016D031 /* MyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E1E9322A671D0E0016D031 /* MyProfileView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		69223F882A708897001ECA9F /* AccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStore.swift; sourceTree = "<group>"; };
+		69223F8A2A708986001ECA9F /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		694908FE2A5F5BA1003FDA76 /* PasskeysTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasskeysTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		694909012A5F5BA1003FDA76 /* PasskeysTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeysTestApp.swift; sourceTree = "<group>"; };
+		694909032A5F5BA1003FDA76 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		694909052A5F5BA2003FDA76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		694909082A5F5BA2003FDA76 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		696E5B522A7059D5000469A2 /* PasskeysTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PasskeysTest.entitlements; sourceTree = "<group>"; };
+		69C8504F2A780D3000460C13 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		69D590B32A6730FB00BF2BAD /* VenmoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenmoViewController.swift; sourceTree = "<group>"; };
+		69D590B52A67345A00BF2BAD /* Transactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transactions.swift; sourceTree = "<group>"; };
+		69D590B72A673C5300BF2BAD /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		69D590B92A674A0D00BF2BAD /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		69E1E92C2A671A0D0016D031 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		69E1E92E2A671B0A0016D031 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		69E1E9302A671CD10016D031 /* PayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayView.swift; sourceTree = "<group>"; };
+		69E1E9322A671D0E0016D031 /* MyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		694908FB2A5F5BA1003FDA76 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		69223F802A707C03001ECA9F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				69D590B92A674A0D00BF2BAD /* SampleData.swift */,
+				69D590B52A67345A00BF2BAD /* Transactions.swift */,
+				69D590B72A673C5300BF2BAD /* Account.swift */,
+				69223F8A2A708986001ECA9F /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		694908F52A5F5BA1003FDA76 = {
+			isa = PBXGroup;
+			children = (
+				69C8504F2A780D3000460C13 /* .gitignore */,
+				694909002A5F5BA1003FDA76 /* PasskeysTest */,
+				694908FF2A5F5BA1003FDA76 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		694908FF2A5F5BA1003FDA76 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				694908FE2A5F5BA1003FDA76 /* PasskeysTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		694909002A5F5BA1003FDA76 /* PasskeysTest */ = {
+			isa = PBXGroup;
+			children = (
+				696E5B522A7059D5000469A2 /* PasskeysTest.entitlements */,
+				69223F882A708897001ECA9F /* AccountStore.swift */,
+				69223F802A707C03001ECA9F /* Model */,
+				69D590B22A6730AD00BF2BAD /* View */,
+				694909012A5F5BA1003FDA76 /* PasskeysTestApp.swift */,
+				69D590B32A6730FB00BF2BAD /* VenmoViewController.swift */,
+				694909052A5F5BA2003FDA76 /* Assets.xcassets */,
+				694909072A5F5BA2003FDA76 /* Preview Content */,
+			);
+			path = PasskeysTest;
+			sourceTree = "<group>";
+		};
+		694909072A5F5BA2003FDA76 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				694909082A5F5BA2003FDA76 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		69D590B22A6730AD00BF2BAD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				69E1E92C2A671A0D0016D031 /* AppView.swift */,
+				69E1E9322A671D0E0016D031 /* MyProfileView.swift */,
+				69E1E9302A671CD10016D031 /* PayView.swift */,
+				69E1E92E2A671B0A0016D031 /* HomeView.swift */,
+				694909032A5F5BA1003FDA76 /* LoginView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		694908FD2A5F5BA1003FDA76 /* PasskeysTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6949090C2A5F5BA2003FDA76 /* Build configuration list for PBXNativeTarget "PasskeysTest" */;
+			buildPhases = (
+				694908FA2A5F5BA1003FDA76 /* Sources */,
+				694908FB2A5F5BA1003FDA76 /* Frameworks */,
+				694908FC2A5F5BA1003FDA76 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PasskeysTest;
+			productName = PasskeysTest;
+			productReference = 694908FE2A5F5BA1003FDA76 /* PasskeysTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		694908F62A5F5BA1003FDA76 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					694908FD2A5F5BA1003FDA76 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+				};
+			};
+			buildConfigurationList = 694908F92A5F5BA1003FDA76 /* Build configuration list for PBXProject "PasskeysTest" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 694908F52A5F5BA1003FDA76;
+			productRefGroup = 694908FF2A5F5BA1003FDA76 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				694908FD2A5F5BA1003FDA76 /* PasskeysTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		694908FC2A5F5BA1003FDA76 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				694909092A5F5BA2003FDA76 /* Preview Assets.xcassets in Resources */,
+				69C850502A780D3000460C13 /* .gitignore in Resources */,
+				694909062A5F5BA2003FDA76 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		694908FA2A5F5BA1003FDA76 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69223F8B2A708986001ECA9F /* User.swift in Sources */,
+				69E1E92D2A671A0D0016D031 /* AppView.swift in Sources */,
+				69E1E92F2A671B0A0016D031 /* HomeView.swift in Sources */,
+				69223F892A708897001ECA9F /* AccountStore.swift in Sources */,
+				694909042A5F5BA1003FDA76 /* LoginView.swift in Sources */,
+				69D590BA2A674A0D00BF2BAD /* SampleData.swift in Sources */,
+				69D590B62A67345A00BF2BAD /* Transactions.swift in Sources */,
+				69E1E9312A671CD10016D031 /* PayView.swift in Sources */,
+				69D590B82A673C5300BF2BAD /* Account.swift in Sources */,
+				69E1E9332A671D0E0016D031 /* MyProfileView.swift in Sources */,
+				69D590B42A6730FB00BF2BAD /* VenmoViewController.swift in Sources */,
+				694909022A5F5BA1003FDA76 /* PasskeysTestApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6949090A2A5F5BA2003FDA76 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6949090B2A5F5BA2003FDA76 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6949090D2A5F5BA2003FDA76 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PasskeysTest/PasskeysTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"PasskeysTest/Preview Content\"";
+				DEVELOPMENT_TEAM = 4U9786SGXR;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidgaag.PasskeysTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6949090E2A5F5BA2003FDA76 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PasskeysTest/PasskeysTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"PasskeysTest/Preview Content\"";
+				DEVELOPMENT_TEAM = 4U9786SGXR;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidgaag.PasskeysTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		694908F92A5F5BA1003FDA76 /* Build configuration list for PBXProject "PasskeysTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6949090A2A5F5BA2003FDA76 /* Debug */,
+				6949090B2A5F5BA2003FDA76 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6949090C2A5F5BA2003FDA76 /* Build configuration list for PBXNativeTarget "PasskeysTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6949090D2A5F5BA2003FDA76 /* Debug */,
+				6949090E2A5F5BA2003FDA76 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 694908F62A5F5BA1003FDA76 /* Project object */;
+}
