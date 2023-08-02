@@ -100,23 +100,61 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
         }
     }
     
-    //    No passwords in our project
-    //    public func createPasswordAccount(username: String, password: String) async {
-    //        currentUser = .authenticated(username: username)
-    //    }
-    
     public func signOut() {
         currentUser = nil
+        // TODO: call /logout endpoint?
     }
     
     // MARK: - Private
     
     private static let relyingPartyIdentifier = "passkeys-backend-7c680c0b8dcc.herokuapp.com"
     
+    private func passkeyChallengeSignUp(username: String) async -> Data {
+        let url = URL(string: "https://passkeys-backend-7c680c0b8dcc.herokuapp.com/signup/public-key/challenge")
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONSerialization.data(withJSONObject: [
+            "response": [
+                "username": username
+            ]
+        ])
+        
+        var (data, response): (Data?, URLResponse?) = (nil, nil)
+        do {
+            try (data, response) = await URLSession.shared.data(for: request)
+        } catch {
+            Logger.authorization.error("URL request for challenge failed: \(error)")
+        }
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            Logger.authorization.error("passkeyChallenge response not OK/200")
+            return Data()
+        }
+        
+        // Decode the challenge and return it as Data
+        if let responseData = data {
+            do {
+                if let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
+                   let encodedChallengeString = json["challenge"] as? String {
+                    print(json)
+                    print(encodedChallengeString)
+                    
+                    return Data(base64Encoded: encodedChallengeString.base64urlToBase64)!
+                } else {
+                    Logger.authorization.error("Failed to extract challenge from JSON")
+                }
+            } catch {
+                Logger.authorization.error("Failed to parse JSON response: \(error)")
+            }
+        } else {
+            Logger.authorization.error("Failed to receive challenge data")
+        }
+        
+        return Data()
+    }
     
-    // TODO: we need two different passkey challenge functions b/c one sends the user, and we need to deal with that as well when this function is called
-    private func passkeyChallenge(type: String) async -> Data {
-        let url = URL(string: "https://passkeys-backend-7c680c0b8dcc.herokuapp.com/\(type)/public-key/challenge")
+    private func passkeyChallengeLogIn() async -> Data {
+        let url = URL(string: "https://passkeys-backend-7c680c0b8dcc.herokuapp.com/login/public-key/challenge")
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         
@@ -156,35 +194,37 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
     
     private func passkeyAssertionRequest() async -> ASAuthorizationRequest {
         await ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: Self.relyingPartyIdentifier)
-            .createCredentialAssertionRequest(challenge: passkeyChallenge(type: "login"))
+            .createCredentialAssertionRequest(challenge: passkeyChallengeLogIn())
     }
     
     private func passkeyRegistrationRequest(username: String) async -> ASAuthorizationRequest {
         await ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: Self.relyingPartyIdentifier)
-            .createCredentialRegistrationRequest(challenge: passkeyChallenge(type: "signup"), name: username, userID: Data(username.utf8)) // TODO userID should come from server
+            .createCredentialRegistrationRequest(challenge: passkeyChallengeSignUp(username: username), name: username, userID: Data(username.utf8)) // TODO: userID should come from server?
     }
-    
-//    private func signInRequests() async -> [ASAuthorizationRequest] {
-//        await [passkeyAssertionRequest(), ASAuthorizationPasswordProvider().createRequest()]
-//    }
     
     // MARK: - Handle the results.
     
     private func handleAuthorizationResult(_ authorizationResult: ASAuthorizationResult, username: String? = nil) async throws {
         switch authorizationResult {
-        case let .passkeyAssertion(passkeyAssertion):
-            // The login was successful.
-            
-//            currentUser = .authenticated(username: username)
-            Logger.authorization.log("Passkey authorization succeeded: \(passkeyAssertion)")
-        case let .passkeyRegistration(passkeyRegistration):
-            // The registration was successful.
-            await finishRegistration(with: passkeyRegistration)
-            
-//            if let username {
-//                currentUser = .authenticated(username: username)
-//            }
-            Logger.authorization.log("Passkey registration succeeded: \(passkeyRegistration)")
+        case let .passkeyAssertion(passkeyAssertion): // LOGIN
+            if await finishLogin(with: passkeyAssertion) {
+                Logger.authorization.log("Passkey authorization succeeded: \(passkeyAssertion)")
+                guard let username = String(bytes: passkeyAssertion.userID, encoding: .utf8) else {
+                    fatalError("Invalid credential: \(passkeyAssertion)")
+                }
+                currentUser = .authenticated(username: username)
+            } else {
+                Logger.authorization.log("Passkey authorization failed: \(passkeyAssertion)")
+            }
+        case let .passkeyRegistration(passkeyRegistration): // REGISTER
+            if await finishRegistration(with: passkeyRegistration) {
+                Logger.authorization.log("Passkey registration succeeded: \(passkeyRegistration)")
+                if let username {
+                    currentUser = .authenticated(username: username)
+                }
+            } else {
+                Logger.authorization.log("Passkey registration failed: \(passkeyRegistration)")
+            }
         default:
             Logger.authorization.error("Received an unknown authorization result.")
             // Throw an error and return to the caller.
@@ -202,18 +242,21 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         request.httpBody = try? JSONSerialization.data(withJSONObject: [
-            "attestationObject": attestationObject?.base64EncodedString().base64ToBase64url,
-            "clientDataJSON": clientDataJSON.base64EncodedString().base64ToBase64url,
-            //            "credentialID": credentialID.base64EncodedString(),
+            "response": [
+                "attestationObject": attestationObject?.base64EncodedString().base64ToBase64url,
+                "clientDataJSON": clientDataJSON.base64EncodedString().base64ToBase64url
+            ]
         ])
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         var response: URLResponse? = nil
         do {
             try (_, response) = await URLSession.shared.data(for: request)
         } catch URLError.notConnectedToInternet {
-            Logger.authorization.error("No internet connection")
+            Logger.authorization.error("No internet connection (in finishRegistration)")
         } catch {
-            Logger.authorization.error("URL request for challenge failed: \(error)")
+            Logger.authorization.error("URL request for login failed: \(error)")
         }
         
         switch (response as? HTTPURLResponse)?.statusCode ?? -1 {
@@ -226,11 +269,45 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
         }
     }
     
-    private func finishLogin(with passkeyAssertion: ASAuthorizationPlatformPublicKeyCredentialAssertion) async {
+    private func finishLogin(with passkeyAssertion: ASAuthorizationPlatformPublicKeyCredentialAssertion) async -> Bool {
+        let credentialID = passkeyAssertion.credentialID
         let clientDataJSON = passkeyAssertion.rawClientDataJSON
         let authenticatorData = passkeyAssertion.rawAuthenticatorData
         let signature = passkeyAssertion.signature
-        let userID = passkeyAssertion.credentialID
+        let userHandle = passkeyAssertion.userID
+        
+        let url = URL(string: "https://passkeys-backend-7c680c0b8dcc.herokuapp.com/login/public-key")
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONSerialization.data(withJSONObject: [
+            "id": credentialID.base64EncodedString().base64ToBase64url,
+            "response": [
+                "clientDataJSON": clientDataJSON.base64EncodedString().base64ToBase64url,
+                "authenticatorData": authenticatorData?.base64EncodedString().base64ToBase64url,
+                "signature": signature?.base64EncodedString().base64ToBase64url,
+                "userHandle": userHandle?.base64EncodedString().base64ToBase64url
+            ]
+        ] as [String : Any])
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        var response: URLResponse? = nil
+        do {
+            try (_, response) = await URLSession.shared.data(for: request)
+        } catch URLError.notConnectedToInternet {
+            Logger.authorization.error("No internet connection")
+        } catch {
+            Logger.authorization.error("URL request for login failed: \(error)")
+        }
+        
+        switch (response as? HTTPURLResponse)?.statusCode ?? -1 {
+        case 200...300:
+            Logger.authorization.log("Login succeeded")
+            return true
+        default:
+            Logger.authorization.error("Login failed")
+            return false
+        }
     }
 }
 
