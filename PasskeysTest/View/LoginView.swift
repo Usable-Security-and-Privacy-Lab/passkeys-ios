@@ -22,6 +22,7 @@ struct LoginView: View {
             TextField("Username", text: $username)
                 .textFieldStyle(.roundedBorder)
                 .frame(width: 300, height: 70)
+                .textContentType(.username)
             Button("Login") {
                 Task {
                     await signIn()
