@@ -13,39 +13,7 @@ class NetworkManager {
         let data: [Transaction]
     }
     private struct Pagination: Codable {
-        let lastTransactionID: Int
-    }
-    
-    
-    private func makeAPIRequest(endpoint: String, method: HTTPMethod, reqBody: Data? = nil) async -> (Data?, HTTPURLResponse?) {
-        let url = URL(string: baseURL + endpoint)
-        var req = URLRequest(url: url!)
-        req.httpMethod = method.rawValue
-        
-        if let reqBody {
-            req.httpBody = reqBody
-        }
-        
-        var (data, response): (Data?, URLResponse?)
-        do {
-            (data, response) = try await URLSession.shared.data(for: req)
-        } catch {
-            print("URLSession error: \(error)")
-        }
-        
-        if let response = response as? HTTPURLResponse {
-            switch response.statusCode {
-            case 200...299: break
-            default:
-                print("Error: Reponse code: \(response.statusCode)")
-                try? print("Message: \(JSONDecoder().decode([String: String].self, from: data!))")
-                
-            }
-            return (data, response)
-        } else {
-            print("Error: No response")
-            return (nil, nil)
-        }
+        let lastTransactionID: Int?
     }
     
     // GET /me
@@ -119,33 +87,51 @@ class NetworkManager {
     }
     
     // POST /transactions
-    // TODO: implement
+    public func makeTransaction(targetID: String, amount: Decimal, action: TransactionAction, note: String, audience: TransactionAudience) async -> Transaction? {
+        let endpoint = "/transactions"
+        let reqJSON: [String: Any] = [
+            "targetID": targetID,
+            "amount": amount,
+            "action": action.rawValue,
+            "note": note,
+            "audience": audience.rawValue
+        ]
+        let reqBody = try? JSONSerialization.data(withJSONObject: reqJSON)
+        let (data, _) = await makeAPIRequest(endpoint: endpoint, method: .post, reqBody: reqBody)
+        
+        if let data {
+            let decoder = JSONDecoder()
+            let transaction = try? decoder.decode(Transaction.self, from: data)
+            return transaction
+        } else {
+            return nil
+        }
+    }
     
     // GET /transactions
     public func getFriendsFeed(lastFetchedTransactionID: Int? = nil) async -> [Transaction]? {
-        await fetchTransactions(feedType: "friends", lastFetchedTransactionID: lastFetchedTransactionID)
+        await fetchTransactions(feedType: .friends, lastFetchedTransactionID: lastFetchedTransactionID)
     }
     
     public func getUserTransactions(userID: Int, lastFetchedTransactionID: Int? = nil) async -> [Transaction]? {
-        await fetchTransactions(feedType: "user", partyID: userID, lastFetchedTransactionID: lastFetchedTransactionID)
+        await fetchTransactions(feedType: .user, partyID: userID, lastFetchedTransactionID: lastFetchedTransactionID)
     }
     
     public func getMyTransactionsWith(userID: Int, lastFetchedTransactionID: Int? = nil) async -> [Transaction]? {
-        await fetchTransactions(feedType: "betweenUs", partyID: userID, lastFetchedTransactionID: lastFetchedTransactionID)
+        await fetchTransactions(feedType: .betweenUs, partyID: userID, lastFetchedTransactionID: lastFetchedTransactionID)
     }
     
-    private func fetchTransactions(feedType: String, partyID: Int? = nil, lastFetchedTransactionID: Int? = nil) async -> [Transaction]? {
+    private func fetchTransactions(feedType: TransactionFeedType, partyID: Int? = nil, lastFetchedTransactionID: Int? = nil) async -> [Transaction]? {
         let endpoint = "/transactions"
-        var reqJSON: [String:Any] = ["feed":feedType] // friends, user, or betweenUs
+        var queryItems = [URLQueryItem(name: "feed", value: feedType.rawValue)]
         if let partyID {
-            reqJSON["partyID"] = partyID
+            queryItems.append(URLQueryItem(name: "partyID", value: String(partyID)))
         }
         if let lastFetchedTransactionID {
-            reqJSON["lastTransactionID"] = lastFetchedTransactionID
+            queryItems.append(URLQueryItem(name: "lastTransactionID", value: String(lastFetchedTransactionID)))
         }
         
-        let reqBody = try? JSONSerialization.data(withJSONObject: reqJSON)
-        let (data, _) = await makeAPIRequest(endpoint: endpoint, method: .get, reqBody: reqBody)
+        let (data, _) = await makeAPIRequest(endpoint: endpoint, queryItems: queryItems, method: .get)
         
         if let data {
             do {
@@ -164,12 +150,12 @@ class NetworkManager {
     // GET /transactions/outstanding
     public func getOutstandingTransactions(lastFetchedTransactionID: Int? = nil) async -> [Transaction]? {
         let endpoint = "/transactions/outstanding"
-        
-        var reqBody: Data?
+        var queryItems: [URLQueryItem]?
         if let lastFetchedTransactionID {
-            reqBody = try? JSONSerialization.data(withJSONObject: ["lastTransactionID": lastFetchedTransactionID])
+            queryItems = [URLQueryItem(name: "lastTransactionID", value: String(lastFetchedTransactionID))]
         }
-        let (data, _) = await makeAPIRequest(endpoint: endpoint, method: .get, reqBody: reqBody)
+        
+        let (data, _) = await makeAPIRequest(endpoint: endpoint, queryItems: queryItems, method: .get)
         
         if let data {
             let decoder = JSONDecoder()
@@ -207,6 +193,45 @@ class NetworkManager {
             return transaction
         } else {
             return nil
+        }
+    }
+    
+
+    
+    private func makeAPIRequest(endpoint: String, queryItems: [URLQueryItem]? = nil, method: HTTPMethod, reqBody: Data? = nil) async -> (Data?, HTTPURLResponse?) {
+        var urlComponents = URLComponents(string: baseURL + endpoint)
+        
+        if let queryItems {
+            urlComponents?.queryItems = queryItems
+        }
+        
+        var req = URLRequest(url: urlComponents!.url!)
+        print("Request URL: \(urlComponents!.url!)")
+        req.httpMethod = method.rawValue
+        
+        if let reqBody {
+            req.httpBody = reqBody
+        }
+        
+        var (data, response): (Data?, URLResponse?)
+        do {
+            (data, response) = try await URLSession.shared.data(for: req)
+        } catch {
+            print("URLSession error: \(error)")
+        }
+        
+        if let response = response as? HTTPURLResponse {
+            switch response.statusCode {
+            case 200...299: break
+            default:
+                print("Error: Reponse code: \(response.statusCode)")
+                try? print("Message: \(JSONDecoder().decode([String: String].self, from: data!))")
+                
+            }
+            return (data, response)
+        } else {
+            print("Error: No response")
+            return (nil, nil)
         }
     }
 }

@@ -1,15 +1,64 @@
 import SwiftUI
 
+@MainActor
 class VenmoViewController: ObservableObject {
     @Published var currentUserProfile: Profile?
     @Published var userTransactions: [Transaction]?
     @Published var friendTransactionFeed: [Transaction]?
+    private var networkManager = NetworkManager()
     
     init() {
         // TODO: Implement
-        currentUserProfile = Profile(username: "davidgaag", firstName: "David", lastName: "Gaag", relationship: .me, friendsCount: 1, id: 1, balance: 100.0)
     }
     
     
+    public func getCurrentUserInfo() {
+    }
     
+    public func getProfileWithID() {
+    }
+    
+    public func addFriendWithID() {
+    }
+    
+    public func removeFriendWithID() {
+    }
+
+    
+    public func getFriendsForProfileWithID() {
+    }
+    
+    public func makeTransaction() {
+        
+    }
+    
+    public func getFriendsFeed() async {
+        friendTransactionFeed = await networkManager.getFriendsFeed()
+    }
+    
+    public func loadMoreTransactions(feed: TransactionFeedType) {
+        switch feed {
+        case .friends:
+            break // TODO: implement
+        case .user:
+            break // TODO: implement
+        case .betweenUs:
+            break // TODO: implement
+        }
+    }
+    
+    public func getUserTransactions() {
+    }
+    
+    public func getMyTransactionsWith() {
+    }
+    
+    public func getOutstandingTransactions() {
+    }
+    
+    public func getTransactionByID() {
+    }
+    
+    public func completeTransaction() {
+    }
 }

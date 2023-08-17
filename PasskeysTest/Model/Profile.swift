@@ -8,7 +8,7 @@ struct Profile: Codable {
     var relationship: Relationship?
     var friendsCount: Int?
     var id: Int
-    var balance: Double?
+    var balance: Decimal?
 }
 
 enum Relationship: String, Codable {

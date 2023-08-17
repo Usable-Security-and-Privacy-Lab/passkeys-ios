@@ -68,6 +68,8 @@ struct LoginView: View {
     }
     
     private func register() async {
+        autoFillAuthorizeTask?.cancel()
+        autoFillAuthorizeTask = nil
         await accountStore.createPasskeyAccount(authorizationController: authorizationController, username: username)
     }
 }

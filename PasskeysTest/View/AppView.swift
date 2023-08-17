@@ -30,6 +30,11 @@ struct AppView: View {
                     .environmentObject(accountStore)
             } else {
                 venmoView
+                    .onAppear {
+                        Task {
+                            await app.getFriendsFeed()
+                        }
+                    }
             }
         }
     }
@@ -60,6 +65,7 @@ struct AppView: View {
                 }
                 .tag(Tab.pay)
             MyProfileView()
+                .environmentObject(accountStore)
                 .tabItem {
                     Label("Me", systemImage: "person")
                         .environment(\.symbolVariants, selectedTab != Tab.myProfile ? .none : .fill)

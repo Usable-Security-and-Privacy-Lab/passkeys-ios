@@ -11,37 +11,55 @@ struct HomeView: View {
     @EnvironmentObject private var app: VenmoViewController
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack {
-                    ForEach(app.friendTransactionFeed!) { transaction in
-                        NavigationLink {
-//                            TransactionView()
-                        } label: {
-                            // TODO: refactor
-                            VStack(alignment: .leading) {
-                                HStack(alignment: .top) {
-                                    Image(systemName: "person.circle")
-                                        .font(.title)
-                                        .padding(.horizontal)
-                                    VStack(alignment: .leading) {
-                                        let paymentVerb = transaction.action == .pay ? "paid" : "charged"
-                                        Text(transaction.actor.displayName + " " + paymentVerb + " " + transaction.target.displayName)
-                                            .font(.headline)
-                                        Text(transaction.note)
-                                    }
-                                }
+        GeometryReader { geo in
+            NavigationView {
+                if (app.friendTransactionFeed == nil) {
+                    ProgressView()
+                        .position(x: geo.size.width / 2, y: geo.size.height / 2 - geo.safeAreaInsets.top - geo.safeAreaInsets.bottom)
+                        .controlSize(.large)
+                        .navigationTitle("Feed")
+                } else {
+                    if (app.friendTransactionFeed!.isEmpty) {
+                        VStack {
+                            Text("There's nothing here... 😕")
                                 .padding()
-                                Divider()
+                            Text("Add friends to see their transactions!")
+                        }
+                        .navigationTitle("Feed")
+                        .foregroundColor(.gray)
+                    } else {
+                        ScrollView {
+                            LazyVStack {
+                                ForEach(app.friendTransactionFeed!) { transaction in
+                                    NavigationLink {
+                                        //TransactionView()
+                                    } label: {
+                                        // TODO: refactor
+                                        VStack(alignment: .leading) {
+                                            HStack(alignment: .top) {
+                                                Image(systemName: "person.circle")
+                                                    .font(.title)
+                                                    .padding(.horizontal)
+                                                VStack(alignment: .leading) {
+                                                    let paymentVerb = transaction.action == .pay ? "paid" : "charged"
+                                                    Text(transaction.actor.displayName + " " + paymentVerb + " " + transaction.target.displayName)
+                                                        .font(.headline)
+                                                    Text(transaction.note)
+                                                }
+                                            }
+                                            .padding()
+                                            Divider()
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
-                        .buttonStyle(.plain)
+                        .navigationTitle("Feed")
                     }
                 }
             }
-            .navigationTitle("Feed")
         }
-        
     }
 }
 
