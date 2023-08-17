@@ -1,13 +1,5 @@
-/*
- See the LICENSE.txt file for this sample’s licensing information.
- 
- Abstract:
- AccountStore manages account sign in and out.
- */
-
 import AuthenticationServices
 import SwiftUI
-import Combine
 import os
 
 public extension Logger {
@@ -40,6 +32,27 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
     
     public var isSignedIn: Bool {
         currentUser != nil
+    }
+    
+    func beginAutoFillAssistedPasskeySignIn(authorizationController: AuthorizationController) async {
+        do {
+            let authorizationResult = try await authorizationController.performAutoFillAssistedRequest(passkeyAssertionRequest())
+            try await handleAuthorizationResult(authorizationResult)
+        } catch let authorizationError as ASAuthorizationError {
+            Logger.authorization.error("Passkey authorization failed. Error: \(authorizationError.localizedDescription)")
+        } catch AuthorizationHandlingError.unknownAuthorizationResult(let authorizationResult) {
+            // Received an unknown response.
+            Logger.authorization.error("""
+            Passkey authorization handling failed. \
+            Received an unknown result: \(String(describing: authorizationResult))
+            """)
+        } catch {
+            // Some other error occurred while handling the authorization.
+            Logger.authorization.error("""
+            Passkey authorization handling failed. \
+            Caught an unknown error during passkey authorization or handling: \(error.localizedDescription)"
+            """)
+        }
     }
     
     public func signIntoPasskeyAccount(authorizationController: AuthorizationController,
@@ -100,9 +113,24 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
         }
     }
     
-    public func signOut() {
+    public func signOut() async {
+        let url = URL(string: "https://passkeys-backend-7c680c0b8dcc.herokuapp.com/logout")
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        
+        var response: URLResponse?
+        do {
+            (_, response) = try await URLSession.shared.data(for: request)
+        } catch {
+            Logger.authorization.error("Error caught when attempting to sign out user: \(error)")
+        }
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            Logger.authorization.error("Sign out response not OK/200")
+            return
+        }
         currentUser = nil
-        // TODO: call /logout endpoint?
+        await URLSession.shared.reset()
     }
     
     // MARK: - Private
@@ -175,9 +203,6 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
             do {
                 if let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
                    let encodedChallengeString = json["challenge"] as? String {
-                    print(json)
-                    print(encodedChallengeString)
-                    
                     return Data(base64Encoded: encodedChallengeString.base64urlToBase64)!
                 } else {
                     Logger.authorization.error("Failed to extract challenge from JSON")
@@ -322,6 +347,36 @@ public final class AccountStore: NSObject, ObservableObject, ASAuthorizationCont
             Logger.authorization.error("Failed to receive username data")
         }
         return (false, "")
+    }
+    
+    // MARK: Test functions - TODO: delete
+    
+    public func signInDefaultUser() {
+        currentUser = .default
+    }
+    
+    public func checkAuthorization() async {
+        let url = URL(string: "https://passkeys-backend-7c680c0b8dcc.herokuapp.com/checkAuthentication")
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        
+        var response: URLResponse?
+        do {
+            (_, response) = try await URLSession.shared.data(for: request)
+        } catch {
+            Logger.authorization.error("Error caught when attempting to sign out user: \(error)")
+        }
+        
+        switch (response as? HTTPURLResponse)?.statusCode ?? -1 {
+        case 200...300:
+            Logger.authorization.debug("User authenticated according to server")
+        default:
+            Logger.authorization.debug("User NOT AUTHENTICATED according to server")
+        }
+    }
+    
+    public func clearURLSession() async {
+        await URLSession.shared.reset()
     }
 }
 

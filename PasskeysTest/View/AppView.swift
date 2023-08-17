@@ -4,6 +4,7 @@ struct AppView: View {
     @ObservedObject private var app = VenmoViewController()
     @ObservedObject var accountStore: AccountStore
     
+    @State private var displaySplashScreen = true
     @State private var showPayView = false
     @State private var selectedTab = Tab.home
     
@@ -14,18 +15,39 @@ struct AppView: View {
     }
     
     var body: some View {
-        if !accountStore.isSignedIn {
-            LoginView()
-                .environmentObject(accountStore)
+        if displaySplashScreen {
+            splashScreen
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        withAnimation {
+                            displaySplashScreen = false
+                        }
+                    }
+                }
         } else {
-            venmoView
-                .environmentObject(accountStore)
+            if !accountStore.isSignedIn {
+                LoginView()
+                    .environmentObject(accountStore)
+            } else {
+                venmoView
+            }
+        }
+    }
+    
+    private var splashScreen: some View {
+        VStack {
+            Image(systemName: "banknote")
+                .font(.system(size: 56.0))
+            Text("Not Venmo")
+                .font(.title)
+                .padding()
         }
     }
     
     private var venmoView: some View {
         TabView(selection: $selectedTab) {
-            HomeView(app: app)
+            HomeView()
+                .environmentObject(app)
                 .tabItem {
                     Label("Home", systemImage: "house")
                         .environment(\.symbolVariants, selectedTab != Tab.home ? .none : .fill)
@@ -41,7 +63,6 @@ struct AppView: View {
                 .tabItem {
                     Label("Me", systemImage: "person")
                         .environment(\.symbolVariants, selectedTab != Tab.myProfile ? .none : .fill)
-                        .animation(.easeInOut, value: selectedTab)
                 }
                 .tag(Tab.myProfile)
         }

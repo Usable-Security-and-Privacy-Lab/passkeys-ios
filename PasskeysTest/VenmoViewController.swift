@@ -1,15 +1,15 @@
 import SwiftUI
 
 class VenmoViewController: ObservableObject {
-    @Published var currentUser: Account?
+    @Published var currentUserProfile: Profile?
     @Published var userTransactions: [Transaction]?
     @Published var friendTransactionFeed: [Transaction]?
     
     init() {
-        currentUser = SampleData.sampleAccounts[0]
-        userTransactions = SampleData.sampleTransactions.filter({ $0.payee == currentUser })
-        friendTransactionFeed = SampleData.sampleTransactions
+        // TODO: Implement
+        currentUserProfile = Profile(username: "davidgaag", firstName: "David", lastName: "Gaag", relationship: .me, friendsCount: 1, id: 1, balance: 100.0)
     }
+    
     
     
 }

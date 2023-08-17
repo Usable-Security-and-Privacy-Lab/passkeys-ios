@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @State private var username: String = ""
+    @State private var autoFillAuthorizeTask: Task<Void, Error>?
     
     @EnvironmentObject private var accountStore: AccountStore
     @Environment(\.authorizationController) private var authorizationController
@@ -36,14 +37,33 @@ struct LoginView: View {
                 }
             }
             .buttonStyle(.bordered)
+            Button("Default User") {
+                Task {
+                    accountStore.signInDefaultUser()
+                }
+            }
+            .padding(.top)
             Spacer()
         }
         .onAppear {
-            
+            autoFillAuthorizeTask = Task {
+                await beginAutoFillAssistedSignIn()
+//                await signIn() // This will bring the prompt up immediately
+            }
+        }
+        .onDisappear {
+            autoFillAuthorizeTask?.cancel()
+            autoFillAuthorizeTask = nil
         }
     }
     
+    private func beginAutoFillAssistedSignIn() async {
+        await accountStore.beginAutoFillAssistedPasskeySignIn(authorizationController: authorizationController)
+    }
+    
     private func signIn() async {
+        autoFillAuthorizeTask?.cancel()
+        autoFillAuthorizeTask = nil
         await accountStore.signIntoPasskeyAccount(authorizationController: authorizationController)
     }
     
@@ -54,6 +74,11 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
+        let accountStore = AccountStore()
         LoginView()
+            .environmentObject(accountStore)
+            .onAppear {
+                accountStore.signInDefaultUser()
+            }
     }
 }

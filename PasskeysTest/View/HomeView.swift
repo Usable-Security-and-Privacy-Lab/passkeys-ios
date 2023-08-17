@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @ObservedObject var app: VenmoViewController
+    @EnvironmentObject private var app: VenmoViewController
     
     var body: some View {
         NavigationView {
@@ -18,15 +18,17 @@ struct HomeView: View {
                         NavigationLink {
 //                            TransactionView()
                         } label: {
+                            // TODO: refactor
                             VStack(alignment: .leading) {
                                 HStack(alignment: .top) {
                                     Image(systemName: "person.circle")
                                         .font(.title)
                                         .padding(.horizontal)
                                     VStack(alignment: .leading) {
-                                        Text("\(transaction.payer.fullName) paid \(transaction.payee.fullName)")
+                                        let paymentVerb = transaction.action == .pay ? "paid" : "charged"
+                                        Text(transaction.actor.displayName + " " + paymentVerb + " " + transaction.target.displayName)
                                             .font(.headline)
-                                        Text("Placeholder message")
+                                        Text(transaction.note)
                                     }
                                 }
                                 .padding()
@@ -39,11 +41,14 @@ struct HomeView: View {
             }
             .navigationTitle("Feed")
         }
+        
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(app: VenmoViewController())
+        let app = VenmoViewController()
+        HomeView()
+            .environmentObject(app)
     }
 }
