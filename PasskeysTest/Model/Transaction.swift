@@ -1,6 +1,6 @@
 import Foundation
 
-struct Transaction: Identifiable, Codable {
+struct Transaction: Identifiable, Codable, Hashable {
     var id: Int
     var actor: Profile
     var target: Profile
@@ -12,12 +12,12 @@ struct Transaction: Identifiable, Codable {
     var audience: TransactionAudience
 }
 
-enum TransactionAction: String, Codable {
+enum TransactionAction: String, Codable, Hashable {
     case pay = "pay"
     case request = "request"
 }
 
-enum TransactionAudience: String, Codable {
+enum TransactionAudience: String, Codable, Hashable {
     case `public` = "public"
     case friends = "friends"
     case `private` = "private"

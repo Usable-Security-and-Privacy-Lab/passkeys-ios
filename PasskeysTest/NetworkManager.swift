@@ -16,6 +16,8 @@ class NetworkManager {
         let lastTransactionID: Int?
     }
     
+    // TODO: endpoints search, update profile,
+    
     // GET /me
     public func getCurrentUserInfo() async -> Profile? {
         let endpoint = "/me"
@@ -139,6 +141,7 @@ class NetworkManager {
                 decoder.dateDecodingStrategy = .secondsSince1970
                 
                 let response = try decoder.decode(TransactionResponse.self, from: data)
+                print(response)
                 return response.data
             } catch {
                 print("Error decoding transactions JSON: \(error)")

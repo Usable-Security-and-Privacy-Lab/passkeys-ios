@@ -1,20 +1,24 @@
-//
-//  PayView.swift
-//  PasskeysTest
-//
-//  Created by David Gaag on 7/18/23.
-//
-
 import SwiftUI
 
-struct PayView: View {
+struct SearchView: View {
+    enum Mode {
+        case search
+        case pay
+    }
+    var mode: Mode
+    
     var body: some View {
-        Text("Pay View")
+        VStack {
+            Text("Search View")
+            NavigationLink(destination: { MyProfileView() }) {
+                Text("GO")
+            }
+        }
     }
 }
 
-struct PayView_Previews: PreviewProvider {
+struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        PayView()
+        SearchView(mode: .pay)
     }
 }

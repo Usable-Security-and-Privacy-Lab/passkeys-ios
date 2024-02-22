@@ -1,10 +1,3 @@
-//
-//  MyProfileView.swift
-//  PasskeysTest
-//
-//  Created by David Gaag on 7/18/23.
-//
-
 import SwiftUI
 
 struct MyProfileView: View {

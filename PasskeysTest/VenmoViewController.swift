@@ -4,7 +4,11 @@ import SwiftUI
 class VenmoViewController: ObservableObject {
     @Published var currentUserProfile: Profile?
     @Published var userTransactions: [Transaction]?
-    @Published var friendTransactionFeed: [Transaction]?
+    @Published var friendTransactionFeed: [Transaction]? {
+        didSet {
+            print("SET friendTransactionFeed: \(friendTransactionFeed)")
+        }
+    }
     private var networkManager = NetworkManager()
     
     init() {
@@ -33,7 +37,7 @@ class VenmoViewController: ObservableObject {
     }
     
     public func getFriendsFeed() async {
-        friendTransactionFeed = await networkManager.getFriendsFeed()
+        self.friendTransactionFeed = await networkManager.getFriendsFeed()
     }
     
     public func loadMoreTransactions(feed: TransactionFeedType) {

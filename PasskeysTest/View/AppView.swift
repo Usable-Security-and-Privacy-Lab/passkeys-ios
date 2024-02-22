@@ -28,13 +28,11 @@ struct AppView: View {
             if !accountStore.isSignedIn {
                 LoginView()
                     .environmentObject(accountStore)
+                    .onAppear {
+                        selectedTab = .home
+                    }
             } else {
                 venmoView
-                    .onAppear {
-                        Task {
-                            await app.getFriendsFeed()
-                        }
-                    }
             }
         }
     }
@@ -58,7 +56,7 @@ struct AppView: View {
                         .environment(\.symbolVariants, selectedTab != Tab.home ? .none : .fill)
                 }
                 .tag(Tab.home)
-            PayView()
+            SearchView(mode: .pay)
                 .tabItem {
                     Label("Pay/Request", systemImage: "banknote")
                         .environment(\.symbolVariants, selectedTab != Tab.pay ? .none : .fill)

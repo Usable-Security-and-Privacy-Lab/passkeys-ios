@@ -1,63 +1,43 @@
-//
-//  HomeView.swift
-//  PasskeysTest
-//
-//  Created by David Gaag on 7/18/23.
-//
-
 import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var app: VenmoViewController
+    @State private var searchQuery = ""
+    @State private var path = NavigationPath()
     
     var body: some View {
-        GeometryReader { geo in
-            NavigationView {
-                if (app.friendTransactionFeed == nil) {
-                    ProgressView()
-                        .position(x: geo.size.width / 2, y: geo.size.height / 2 - geo.safeAreaInsets.top - geo.safeAreaInsets.bottom)
-                        .controlSize(.large)
-                        .navigationTitle("Feed")
-                } else {
-                    if (app.friendTransactionFeed!.isEmpty) {
-                        VStack {
-                            Text("There's nothing here... 😕")
-                                .padding()
-                            Text("Add friends to see their transactions!")
-                        }
-                        .navigationTitle("Feed")
-                        .foregroundColor(.gray)
-                    } else {
-                        ScrollView {
-                            LazyVStack {
-                                ForEach(app.friendTransactionFeed!) { transaction in
-                                    NavigationLink {
-                                        //TransactionView()
-                                    } label: {
-                                        // TODO: refactor
-                                        VStack(alignment: .leading) {
-                                            HStack(alignment: .top) {
-                                                Image(systemName: "person.circle")
-                                                    .font(.title)
-                                                    .padding(.horizontal)
-                                                VStack(alignment: .leading) {
-                                                    let paymentVerb = transaction.action == .pay ? "paid" : "charged"
-                                                    Text(transaction.actor.displayName + " " + paymentVerb + " " + transaction.target.displayName)
-                                                        .font(.headline)
-                                                    Text(transaction.note)
-                                                }
-                                            }
-                                            .padding()
-                                            Divider()
-                                        }
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                        }
-                        .navigationTitle("Feed")
+        NavigationStack(path: $path) {
+            if app.friendTransactionFeed != nil && !app.friendTransactionFeed!.isEmpty {
+                FeedView(path: $path)
+                    .environmentObject(app)
+                    .navigationTitle("Feed")
+                    .venmoSearchBar(searchQuery: $searchQuery)
+                    .navigationDestination(for: Transaction.self) { transaction in
+                        TransactionView() // TODO: param
                     }
+            } else {
+                Color(.clear)
+                    .navigationTitle("Feed")
+            }
+        }
+        .overlay {
+//            if false { // TODO: delete
+                if app.friendTransactionFeed == nil {
+                    ProgressView()
+                        .controlSize(.large)
+                } else if app.friendTransactionFeed!.isEmpty {
+                    VStack {
+                        Text("There's nothing here... 😕")
+                            .padding()
+                        Text("Add friends to see their transactions!")
+                    }
+                    .foregroundColor(.gray)
                 }
+//            }
+        }
+        .onAppear {
+            Task {
+                await app.getFriendsFeed()
             }
         }
     }
