@@ -32,6 +32,21 @@ class NetworkManager {
         }
     }
     
+    // TODO: test put /me
+    // PUT /me
+    public func updateCurrentUserInfo(firstName : String, lastName : String) async -> Bool {
+        let endpoint = "/me"
+        let reqBody = try? JSONEncoder().encode(["firstName": firstName, "lastName": lastName])
+        
+        let (_, response) = await makeAPIRequest(endpoint: endpoint, method: .put, reqBody: reqBody)
+        
+        if response?.statusCode == 200 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     // GET /profiles/:userID
     public func getProfileWithID(_ id: Int) async -> Profile? {
         let endpoint = "/profiles/\(id)"

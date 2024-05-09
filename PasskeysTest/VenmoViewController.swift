@@ -4,6 +4,7 @@ import SwiftUI
 class VenmoViewController: ObservableObject {
     @Published var currentUserProfile: Profile?
     @Published var userTransactions: [Transaction]?
+    @Published var requestedUserProfile: Profile?
     @Published var friendTransactionFeed: [Transaction]? {
         didSet {
             print("SET friendTransactionFeed: \(friendTransactionFeed)")
@@ -15,11 +16,34 @@ class VenmoViewController: ObservableObject {
         // TODO: Implement
     }
     
+    // TODO: search function
     
-    public func getCurrentUserInfo() {
+    public func getCurrentUserInfo() async {
+        self.currentUserProfile = await networkManager.getCurrentUserInfo();
     }
     
-    public func getProfileWithID() {
+    public func updateCurrentUserInfo(oldFN : String, oldLN : String, firstName : String, lastName : String) async {
+        if (firstName != "" && firstName != oldFN) {
+            if (lastName != "" && lastName != oldLN) {
+                await networkManager.updateCurrentUserInfo(firstName: firstName, lastName: lastName)
+            }
+            else {
+                await networkManager.updateCurrentUserInfo(firstName: firstName, lastName: oldLN)
+            }
+        }
+        else {
+            if (lastName != "" && lastName != oldLN) {
+                await networkManager.updateCurrentUserInfo(firstName: oldFN, lastName: lastName)
+            }
+            else {
+                await networkManager.updateCurrentUserInfo(firstName: oldFN, lastName: oldLN)
+            }
+        }
+        await getCurrentUserInfo();
+    }
+    
+    public func getProfileWithID(_ id : Int) async {
+        self.requestedUserProfile = await networkManager.getProfileWithID(id)
     }
     
     public func addFriendWithID() {
@@ -51,18 +75,20 @@ class VenmoViewController: ObservableObject {
         }
     }
     
-    public func getUserTransactions() {
+    public func getUserTransactions(userID: Int) async {
+        self.userTransactions = await networkManager.getMyTransactionsWith(userID: userID)
     }
     
     public func getMyTransactionsWith() {
     }
     
-    public func getOutstandingTransactions() {
+    public func getOutstandingTransactions() async {
     }
     
     public func getTransactionByID() {
     }
     
-    public func completeTransaction() {
+    public func completeTransaction(id: Int, action: TransactionCompletion) async {
+        await networkManager.completeTransaction(withID: id, action: action)
     }
 }
